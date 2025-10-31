@@ -1,14 +1,15 @@
-# Use an official OpenJDK image as a base
+# Use lightweight JDK base image
 FROM openjdk:17-jdk-slim
 
-# Set working directory inside the container
+# Set working directory
 WORKDIR /app
 
-# Copy the jar file from target folder into the container
-COPY target/*.jar app.jar
+# Copy JAR from subdirectory
+COPY "BOOk STORE MANAGEMENT SYSTEM/bookStore/target/bookStore-0.0.1-SNAPSHOT.jar" app.jar
 
-# Expose port 8080
-EXPOSE 8080
+# Expose app port
+EXPOSE 1001
 
-# Command to run the app
+# Run the JAR
 ENTRYPOINT ["java", "-jar", "app.jar"]
+
