@@ -9,7 +9,8 @@ pipeline {
     stages {
         stage('Clone Repository') {
             steps {
-                git 'https://github.com/PuliLalithasri/Book-store-management-system-using-spring-boot.git'
+                git branch: 'main', url: 'https://github.com/PuliLalithasri/Book-store-management-system-using-spring-boot.git'
+            }
             }
         }
 
