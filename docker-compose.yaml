@@ -1,13 +1,33 @@
-version: '3'
+version: '3.8'
+
 services:
   mysql:
     image: mysql:8
+    container_name: mysql-db
+    restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: book
     ports:
       - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
   app:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: book-store-app
+    restart: on-failure
+    ports:
+      - "1001:1001"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/book?serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
     depends_on:
       - mysql
+
+volumes:
+  mysql_data:
