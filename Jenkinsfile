@@ -15,7 +15,7 @@ pipeline {
 
         stage('Build with Maven') {
             steps {
-                dir('bookStore') {  // 👈 change directory to where pom.xml exists
+                dir('BOOk STORE MANAGEMENT SYSTEM/bookStore') {  // 👈 change directory to where pom.xml exists
                     sh 'mvn clean package'
                 }
             }
@@ -23,7 +23,7 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                dir('bookStore') {
+                dir('BOOk STORE MANAGEMENT SYSTEM/bookStore') {
                     sh 'docker build -t bookstore-app .'
                 }
             }
