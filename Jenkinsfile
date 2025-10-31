@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     tools {
-        maven 'Maven' // Use Maven installed in Jenkins
-        jdk 'JDK 17'   // Use JDK 17 (or whatever version you configured)
+        jdk 'JDK 17'
+        maven 'Maven'
     }
 
     stages {
@@ -11,28 +11,27 @@ pipeline {
             steps {
                 git branch: 'main', url: 'https://github.com/PuliLalithasri/Book-store-management-system-using-spring-boot.git'
             }
-            }
         }
 
         stage('Build with Maven') {
             steps {
-                sh 'mvn clean package -DskipTests'
+                dir('bookStore') {  // 👈 change directory to where pom.xml exists
+                    sh 'mvn clean package'
+                }
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                script {
-                    docker.build('bookstore-app')
+                dir('bookStore') {
+                    sh 'docker build -t bookstore-app .'
                 }
             }
         }
 
         stage('Run Container') {
             steps {
-                script {
-                    sh 'docker run -d -p 8081:8080 --name bookstore bookstore-app'
-                }
+                sh 'docker run -d -p 8080:8080 bookstore-app'
             }
         }
     }
