@@ -14,26 +14,28 @@ pipeline {
         }
 
         stage('Build with Maven') {
-    steps {
-        dir('BOOk STORE MANAGEMENT SYSTEM/bookStore') {
-            sh 'mvn clean package -DskipTests'
-        }
-    }
-}
-
-
-        stage('Build Docker Image') {
             steps {
                 dir('BOOk STORE MANAGEMENT SYSTEM/bookStore') {
-                    sh 'docker build -t bookstore-app .'
+                    sh 'mvn clean package -DskipTests'
                 }
             }
         }
 
-        stage('Run Container') {
+        stage('Build and Run with Docker Compose') {
             steps {
-                sh 'docker run -d -p 8080:8080 bookstore-app'
+                sh 'docker-compose down || true'
+                sh 'docker-compose build'
+                sh 'docker-compose up -d'
             }
+        }
+    }
+
+    post {
+        success {
+            echo '✅ Build and deployment successful!'
+        }
+        failure {
+            echo '❌ Build failed. Check logs above.'
         }
     }
 }
