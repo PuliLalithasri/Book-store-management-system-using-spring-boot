@@ -27,7 +27,10 @@ pipeline {
                 dir('BOOk STORE MANAGEMENT SYSTEM/bookStore') {
                     echo '🚀 Running Spring Boot application...'
                     // Run in background so Jenkins doesn’t hang
-                    sh 'nohup java -jar target/*.jar > app.log 2>&1 &'
+                    sh 'nohup java -jar target/bookStore-0.0.1-SNAPSHOT.jar > app.log 2>&1 &'
+sleep 20
+sh 'curl -v http://localhost:1001 || true'
+
                 }
             }
         }
