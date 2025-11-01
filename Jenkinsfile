@@ -16,26 +16,29 @@ pipeline {
         stage('Build with Maven') {
             steps {
                 dir('BOOk STORE MANAGEMENT SYSTEM/bookStore') {
+                    echo '🚧 Building Spring Boot project using Maven...'
                     sh 'mvn clean package -DskipTests'
                 }
             }
         }
 
-        stage('Build and Run with Docker Compose') {
+        stage('Run Spring Boot App') {
             steps {
-                sh 'docker-compose down || true'
-                sh 'docker-compose build'
-                sh 'docker-compose up -d'
+                dir('BOOk STORE MANAGEMENT SYSTEM/bookStore') {
+                    echo '🚀 Running Spring Boot application...'
+                    // Run in background so Jenkins doesn’t hang
+                    sh 'nohup java -jar target/*.jar > app.log 2>&1 &'
+                }
             }
         }
     }
 
     post {
         success {
-            echo '✅ Build and deployment successful!'
+            echo '✅ Build and Spring Boot app started successfully!'
         }
         failure {
-            echo '❌ Build failed. Check logs above.'
+            echo '❌ Build failed. Check console output for details.'
         }
     }
 }
